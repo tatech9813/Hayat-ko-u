@@ -1,4 +1,4 @@
-const CACHE = 'hayatkocu-v1';
+const CACHE = 'hayatkocu-v2';
 const ASSETS = [
   '/',
   '/index.html',
@@ -30,6 +30,34 @@ self.addEventListener('fetch', e => {
         caches.open(CACHE).then(c => c.put(e.request, clone));
         return res;
       }).catch(() => cached);
+    })
+  );
+});
+
+// BİLDİRİM GÖSTER
+self.addEventListener('message', e => {
+  if (e.data && e.data.type === 'SHOW_NOTIFICATION') {
+    const { title, body, tag } = e.data;
+    e.waitUntil(
+      self.registration.showNotification(title, {
+        body,
+        tag,
+        icon: '/icon-192.png',
+        badge: '/icon-192.png',
+        renotify: true,
+        requireInteraction: false
+      })
+    );
+  }
+});
+
+// BİLDİRİME TIKLANINCA UYGULAMAYI AÇ
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  e.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
+      if (list.length > 0) return list[0].focus();
+      return clients.openWindow('/');
     })
   );
 });
