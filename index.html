@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -348,6 +349,66 @@ body.palette-dark-ocean {
   --purple:#818cf8; --purple-bg:rgba(129,140,248,.10);
   --yellow:#fbbf24; --yellow-bg:rgba(251,191,36,.10);
 }
+/* ══════════════════════════════════════
+   DASHBOARD
+══════════════════════════════════════ */
+.dash-greeting { font-family:'Syne',sans-serif; font-size:24px; font-weight:700; color:var(--text); margin-bottom:4px; }
+.dash-greeting span { color:var(--green); }
+.dash-date { font-size:12px; color:var(--text3); margin-bottom:20px; }
+.dash-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+.dash-card {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:14px; padding:16px; cursor:pointer;
+  transition:transform .18s, border-color .18s;
+  position:relative; overflow:hidden;
+}
+.dash-card:hover { transform:translateY(-2px); border-color:var(--border2); }
+.dash-card-icon { font-size:20px; margin-bottom:8px; }
+.dash-card-label { font-size:10px; color:var(--text3); font-weight:600; letter-spacing:.08em; text-transform:uppercase; margin-bottom:6px; }
+.dash-card-val { font-family:'Syne',sans-serif; font-size:26px; font-weight:700; color:var(--text); line-height:1; }
+.dash-card-sub { font-size:11px; color:var(--text3); margin-top:4px; }
+.dash-card-accent { position:absolute; bottom:0; left:0; right:0; height:3px; border-radius:0 0 14px 14px; }
+.dash-card.full { grid-column:1/-1; }
+.dash-pbar { height:5px; background:var(--bg3); border-radius:3px; margin-top:10px; overflow:hidden; }
+.dash-pbar-fill { height:100%; border-radius:3px; transition:width .6s cubic-bezier(.4,0,.2,1); }
+
+/* Görev ring küçük */
+.dash-ring-wrap { position:relative; width:52px; height:52px; flex-shrink:0; }
+.dash-ring { width:52px; height:52px; transform:rotate(-90deg); display:block; }
+.dash-ring-bg { fill:none; stroke:var(--bg3); stroke-width:6; }
+.dash-ring-fill { fill:none; stroke-width:6; stroke-linecap:round; stroke-dasharray:133; stroke-dashoffset:133; transition:stroke-dashoffset .6s cubic-bezier(.4,0,.2,1); }
+.dash-ring-text { position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--text); }
+
+.dash-task-row { display:flex; align-items:center; gap:14px; }
+.dash-task-info { flex:1; }
+.dash-task-stats { display:flex; gap:12px; margin-top:6px; }
+.dash-task-stat { font-size:12px; color:var(--text2); }
+.dash-task-stat span { font-weight:700; color:var(--text); }
+
+.dash-habit-row { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+.dash-habit-chip {
+  font-size:11px; padding:4px 10px; border-radius:20px;
+  border:1px solid var(--border);
+  background:var(--bg3); color:var(--text2);
+  display:flex; align-items:center; gap:5px;
+}
+.dash-habit-chip.done { background:var(--green-bg); border-color:var(--green); color:var(--green); }
+.dash-habit-chip.done::before { content:'✓'; font-weight:700; }
+.dash-habit-chip.miss::before { content:'○'; opacity:.5; }
+
+.dash-finance-row { display:flex; gap:10px; margin-top:8px; }
+.dash-fin-item { flex:1; background:var(--bg3); border-radius:10px; padding:10px; text-align:center; }
+.dash-fin-item .val { font-family:'Syne',sans-serif; font-size:15px; font-weight:700; }
+.dash-fin-item .lbl { font-size:10px; color:var(--text3); margin-top:2px; }
+
+.dash-sleep-big { display:flex; align-items:baseline; }
+.dash-sleep-row { display:flex; align-items:center; gap:14px; margin-top:8px; }
+.dash-sleep-hours { font-family:'Syne',sans-serif; font-size:32px; font-weight:700; line-height:1; }
+.dash-sleep-info { flex:1; }
+.dash-sleep-qual { font-size:13px; font-weight:600; margin-top:2px; }
+
+.dash-section-title { font-family:'Syne',sans-serif; font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text3); margin:16px 0 8px; }
+
 /* ══════════════════════════════════════
    KOYU PALETLER
 ══════════════════════════════════════ */
@@ -718,7 +779,8 @@ body.light.palette-light-cobalt {
 <!-- MAIN -->
 <div class="main">
   <div class="sidebar">
-    <button class="nav-btn active" data-label="Görevler" id="nb-gorev" onclick="sw('gorev',this)">✓</button>
+    <button class="nav-btn active" data-label="Özet" id="nb-dash" onclick="sw('dash',this)">⌂</button>
+    <button class="nav-btn" data-label="Görevler" id="nb-gorev" onclick="sw('gorev',this)">✓</button>
     <button class="nav-btn" data-label="Alışkanlıklar" id="nb-aliskan" onclick="sw('aliskan',this)">🔥</button>
     <button class="nav-btn" data-label="Uyku" id="nb-uyku" onclick="sw('uyku',this)">🌙</button>
     <button class="nav-btn" data-label="Finans" id="nb-finans" onclick="sw('finans',this)">₺</button>
@@ -732,8 +794,86 @@ body.light.palette-light-cobalt {
 
   <div class="content">
 
+    <!-- DASHBOARD -->
+    <div id="dash" class="view active">
+      <div id="dash-greeting" class="dash-greeting"></div>
+      <div id="dash-date" class="dash-date"></div>
+
+      <!-- GÖREVLER KARTI -->
+      <div class="dash-section-title">📋 Bugün</div>
+      <div class="dash-card full" onclick="sw('gorev',null)">
+        <div class="dash-card-label">Görevler</div>
+        <div class="dash-task-row">
+          <div class="dash-ring-wrap">
+            <svg class="dash-ring" viewBox="0 0 52 52">
+              <circle cx="26" cy="26" r="21" class="dash-ring-bg"/>
+              <circle cx="26" cy="26" r="21" class="dash-ring-fill" id="dash-ring-fill" style="stroke:var(--green)"/>
+            </svg>
+            <div class="dash-ring-text" id="dash-task-pct">%0</div>
+          </div>
+          <div class="dash-task-info">
+            <div id="dash-task-summary" style="font-size:13px;color:var(--text2)">Yükleniyor...</div>
+            <div class="dash-task-stats">
+              <div class="dash-task-stat">✅ <span id="dash-done">0</span> tamamlanan</div>
+              <div class="dash-task-stat">⏳ <span id="dash-pend">0</span> bekleyen</div>
+            </div>
+          </div>
+        </div>
+        <div class="dash-card-accent" style="background:var(--green)"></div>
+      </div>
+
+      <!-- UYKU + FİNANS -->
+      <div class="dash-grid">
+        <!-- UYKU -->
+        <div class="dash-card" onclick="sw('uyku',null)">
+          <div class="dash-card-label">Son Uyku</div>
+          <div class="dash-sleep-row">
+            <div class="dash-sleep-big">
+              <span class="dash-sleep-hours" id="dash-sleep-h">—</span>
+              <span style="font-size:13px;color:var(--text3);margin-left:3px">sa</span>
+            </div>
+            <div class="dash-sleep-info">
+              <div id="dash-sleep-qual" class="dash-sleep-qual"></div>
+              <div id="dash-sleep-diff" style="font-size:11px;color:var(--text3);margin-top:3px"></div>
+              <div id="dash-sleep-date" style="font-size:10px;color:var(--text3);margin-top:2px"></div>
+            </div>
+          </div>
+          <div class="dash-card-accent" style="background:var(--blue)"></div>
+        </div>
+
+        <!-- FİNANS -->
+        <div class="dash-card" onclick="sw('finans',null)">
+          <div class="dash-card-label">Bu Ay</div>
+          <div class="dash-finance-row">
+            <div class="dash-fin-item">
+              <div class="val" id="dash-income" style="color:var(--green)">₺0</div>
+              <div class="lbl">Gelir</div>
+            </div>
+            <div class="dash-fin-item">
+              <div class="val" id="dash-expense" style="color:var(--red)">₺0</div>
+              <div class="lbl">Gider</div>
+            </div>
+          </div>
+          <div id="dash-net-bar" class="dash-pbar" style="margin-top:10px">
+            <div class="dash-pbar-fill" id="dash-net-fill" style="width:0%;background:var(--green)"></div>
+          </div>
+          <div id="dash-net-label" style="font-size:10px;color:var(--text3);margin-top:5px;text-align:right"></div>
+          <div class="dash-card-accent" style="background:var(--green)"></div>
+        </div>
+      </div>
+
+      <!-- ALIŞKANLIKLAR -->
+      <div class="dash-section-title">🔥 Alışkanlıklar — Bugün</div>
+      <div class="dash-card full" onclick="sw('aliskan',null)">
+        <div id="dash-habits-row" class="dash-habit-row">
+          <div style="font-size:13px;color:var(--text3)">Alışkanlık yok</div>
+        </div>
+        <div class="dash-card-accent" style="background:var(--purple)"></div>
+      </div>
+    </div>
+
     <!-- GÖREVLER -->
-    <div id="gorev" class="view active">
+    <div id="gorev" class="view">
       <div id="welcome-banner" class="welcome-banner" style="display:none"></div>
       <div id="reminder-banner" class="reminder-banner">
         <button class="reminder-banner-close" onclick="closeBanner()">×</button>
@@ -1634,7 +1774,7 @@ function showBackupInfo(type,msg){
 }
 
 function save(){try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}}
-function renderAll(){rTasks();rHabits();rFinDaily();rDebts();rInvestments();rSleep();}
+function renderAll(){rDash();rTasks();rHabits();rFinDaily();rDebts();rInvestments();rSleep();}
 
 async function loadWeather(){
   try{
@@ -1659,6 +1799,111 @@ async function loadWeather(){
 }
 
 // GÖREVLER
+function rDash(){
+  const today=td();
+  const now=new Date();
+
+  // Greeting
+  const name=localStorage.getItem('hayatkocu_name')||'';
+  const h=now.getHours();
+  const salute=h<12?'Günaydın':'Hoşgeldin';
+  const grEl=document.getElementById('dash-greeting');
+  if(grEl) grEl.innerHTML=`${salute}${name?`, <span>${name}</span>`:''} 👋`;
+  const dateEl=document.getElementById('dash-date');
+  if(dateEl){
+    const days=['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+    dateEl.textContent=`${days[now.getDay()]}, ${now.getDate()} ${MN[now.getMonth()]} ${now.getFullYear()}`;
+  }
+
+  // Görevler
+  const tt=data.tasks.filter(x=>x.date===today);
+  const done=tt.filter(x=>x.done).length;
+  const total=tt.length;
+  const pct=total?Math.round(done/total*100):0;
+  const circ=133;
+  const rf=document.getElementById('dash-ring-fill');
+  if(rf){ rf.style.strokeDashoffset=circ-(pct/100)*circ; }
+  const dp=document.getElementById('dash-task-pct'); if(dp) dp.textContent='%'+pct;
+  const ds=document.getElementById('dash-task-summary');
+  if(ds){
+    if(!total) ds.textContent='Bugün henüz görev eklenmedi.';
+    else if(pct===100) ds.textContent='🎉 Tüm görevler tamamlandı!';
+    else ds.textContent=`${total-done} görev daha tamamlanmayı bekliyor.`;
+  }
+  const dd=document.getElementById('dash-done'); if(dd) dd.textContent=done;
+  const dp2=document.getElementById('dash-pend'); if(dp2) dp2.textContent=total-done;
+
+  // Uyku
+  const IDEAL_SLEEP=8;
+  const sleepSorted=[...data.sleep].sort((a,b)=>b.date.localeCompare(a.date));
+  const lastSleep=sleepSorted[0];
+  const sh=document.getElementById('dash-sleep-h');
+  const sq=document.getElementById('dash-sleep-qual');
+  const sdiff=document.getElementById('dash-sleep-diff');
+  const sd=document.getElementById('dash-sleep-date');
+  if(lastSleep){
+    const dur=parseFloat(lastSleep.duration||lastSleep.sure||0);
+    if(sh) sh.textContent=dur;
+    const diff=Math.round((dur-IDEAL_SLEEP)*10)/10;
+    if(sq){
+      if(dur>=7&&dur<=9){sq.textContent='😴 İdeal uyku';sq.style.color='var(--green)';}
+      else if(dur<7){sq.textContent='😪 Yetersiz';sq.style.color='var(--red)';}
+      else{sq.textContent='😴 Fazla uyku';sq.style.color='var(--yellow)';}
+    }
+    if(sdiff){
+      const absDiff=Math.abs(diff);
+      if(diff===0) sdiff.textContent='İdealde';
+      else if(diff<0) sdiff.textContent=`Ortalamadan ${absDiff} sa eksik`;
+      else sdiff.textContent=`Ortalamadan ${absDiff} sa fazla`;
+      sdiff.style.color=Math.abs(diff)<=1?'var(--text3)':diff<0?'var(--red)':'var(--blue)';
+    }
+    if(sd){
+      const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
+      const yd=yesterday.toISOString().slice(0,10).replace('T',' ').slice(0,10);
+      sd.textContent=lastSleep.date===today?'Bu gece':lastSleep.date===yd?'Dün gece':lastSleep.date;
+    }
+  } else {
+    if(sh) sh.textContent='—';
+    if(sq){sq.textContent='Kayıt yok';sq.style.color='var(--text3)';}
+    if(sdiff) sdiff.textContent='';
+    if(sd) sd.textContent='';
+  }
+
+  // Finans
+  const month=today.slice(0,7);
+  const monthTxs=data.txs.filter(x=>x.date&&x.date.slice(0,7)===month);
+  const income=monthTxs.filter(x=>x.type==='gelir').reduce((s,x)=>s+(+x.amount||0),0);
+  const expense=monthTxs.filter(x=>x.type==='gider').reduce((s,x)=>s+(+x.amount||0),0);
+  const fi=document.getElementById('dash-income'); if(fi) fi.textContent='₺'+income.toLocaleString('tr-TR');
+  const fe=document.getElementById('dash-expense'); if(fe) fe.textContent='₺'+expense.toLocaleString('tr-TR');
+  const nf=document.getElementById('dash-net-fill');
+  const nl=document.getElementById('dash-net-label');
+  if(nf){
+    const total2=income+expense;
+    const pct2=total2?Math.round((income/total2)*100):50;
+    nf.style.width=pct2+'%';
+    nf.style.background=income>=expense?'var(--green)':'var(--red)';
+  }
+  if(nl){
+    const net=income-expense;
+    nl.textContent=(net>=0?'+ ':'- ')+'₺'+Math.abs(net).toLocaleString('tr-TR')+' net';
+    nl.style.color=net>=0?'var(--green)':'var(--red)';
+  }
+
+  // Alışkanlıklar
+  const hr=document.getElementById('dash-habits-row');
+  if(hr){
+    if(!data.habits.length){
+      hr.innerHTML='<div style="font-size:13px;color:var(--text3)">Alışkanlık eklenmemiş.</div>';
+    } else {
+      hr.innerHTML=data.habits.map(h=>{
+        const done2=h.log&&h.log[today];
+        return `<div class="dash-habit-chip ${done2?'done':'miss'}">${h.name||h.ad||'?'}</div>`;
+      }).join('');
+    }
+  }
+}
+
 function rTasks(){
   const today=td();
   const tt=data.tasks.filter(x=>x.date===today);
@@ -2337,10 +2582,15 @@ document.getElementById('cal-modal').addEventListener('click',function(e){if(e.t
 function sw(id,btn){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');btn.classList.add('active');
+  const view=document.getElementById(id);
+  if(view) view.classList.add('active');
+  // btn doğrudan verilmişse onu, yoksa nb-{id} butonunu aktif et
+  const activeBtn=btn||(document.getElementById('nb-'+id));
+  if(activeBtn) activeBtn.classList.add('active');
   if(id==='rapor'){rMonth=td().slice(0,7);setTimeout(rReport,60);}
-  if(id==='uyku')setTimeout(rSleepChart,60);
+  if(id==='uyku') setTimeout(rSleepChart,60);
   if(id==='takvim'){bigCalMonth=td().slice(0,7);rBigCal();}
+  if(id==='dash') rDash();
 }
 function swSub(parent,id,btn){
   document.querySelectorAll('#'+parent+' .subview').forEach(v=>v.classList.remove('active'));
