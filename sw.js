@@ -1,7 +1,7 @@
-const CACHE = 'hayatkocu-v2';
+const CACHE = 'hayatkocu-v3';
 const ASSETS = [
-  '/',
-  '/index.html',
+  '/Hayat-ko-u/',
+  '/Hayat-ko-u/index.html',
   'https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap',
   'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js'
 ];
@@ -34,7 +34,6 @@ self.addEventListener('fetch', e => {
   );
 });
 
-// BİLDİRİM GÖSTER
 self.addEventListener('message', e => {
   if (e.data && e.data.type === 'SHOW_NOTIFICATION') {
     const { title, body, tag } = e.data;
@@ -42,8 +41,8 @@ self.addEventListener('message', e => {
       self.registration.showNotification(title, {
         body,
         tag,
-        icon: '/icon-192.png',
-        badge: '/icon-192.png',
+        icon: '/Hayat-ko-u/icon-192.png',
+        badge: '/Hayat-ko-u/icon-192.png',
         renotify: true,
         requireInteraction: false
       })
@@ -51,13 +50,12 @@ self.addEventListener('message', e => {
   }
 });
 
-// BİLDİRİME TIKLANINCA UYGULAMAYI AÇ
 self.addEventListener('notificationclick', e => {
   e.notification.close();
   e.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
       if (list.length > 0) return list[0].focus();
-      return clients.openWindow('/');
+      return clients.openWindow('/Hayat-ko-u/');
     })
   );
 });
