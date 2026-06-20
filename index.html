@@ -553,7 +553,7 @@ select.inp{cursor:pointer}
       <div class="page" id="p-home">
         <div class="home-greeting">
           <div class="home-date" id="h-date"></div>
-          <div class="home-name" id="h-name">Hoşgeldin 👋</div>
+          <div class="home-name" id="h-name" data-i18n="home">Hoşgeldin 👋</div>
           <div class="home-weather" id="h-weather">⛅ <span data-i18n="loading">Yükleniyor...</span></div>
         </div>
         <!-- Bakiye kartı -->
@@ -561,8 +561,8 @@ select.inp{cursor:pointer}
           <div class="lbl" data-i18n="balance">Bakiye</div>
           <div class="val" id="h-balance">₺0</div>
           <div class="row">
-            <div><div class="sub-lbl">Gelir</div><div class="sub-val" id="h-income">+0</div></div>
-            <div style="text-align:right"><div class="sub-lbl">Gider</div><div class="sub-val" id="h-expense">-0</div></div>
+            <div><div class="sub-lbl" data-i18n="income">Gelir</div><div class="sub-val" id="h-income">+0</div></div>
+            <div style="text-align:right"><div class="sub-lbl" data-i18n="expense">Gider</div><div class="sub-val" id="h-expense">-0</div></div>
           </div>
         </div>
         <!-- Görev & Alışkanlık grid -->
@@ -582,7 +582,7 @@ select.inp{cursor:pointer}
         <div class="sleep-card-home" onclick="goTab(4)">
           <div style="display:flex;justify-content:space-between;align-items:flex-start">
             <div>
-              <div style="font-size:12px;color:var(--text3)">Uyku · 7g</div>
+              <div style="font-size:12px;color:var(--text3)" data-i18n="sleep_home">Uyku · 7g</div>
               <div style="font-size:28px;font-weight:800;color:var(--text);margin-top:4px"><span id="h-sleep">—</span> <span style="font-size:16px;color:var(--text3)">h</span></div>
             </div>
             <div style="font-size:28px">🌙</div>
@@ -592,7 +592,7 @@ select.inp{cursor:pointer}
         <!-- Su takibi mini -->
         <div class="card" onclick="goTab(7)" style="display:flex;justify-content:space-between;align-items:center">
           <div>
-            <div style="font-size:12px;color:var(--text3)">Su Takibi</div>
+            <div style="font-size:12px;color:var(--text3)" data-i18n="water_home">Su Takibi</div>
             <div style="font-size:24px;font-weight:800;color:var(--text);margin-top:4px"><span id="h-water">0</span> <span style="font-size:13px;color:var(--text3)">ml</span></div>
           </div>
           <div style="font-size:32px">💧</div>
@@ -607,7 +607,7 @@ select.inp{cursor:pointer}
       <!-- 1: FİNANS -->
       <div class="page" id="p-finance">
         <div class="page-header">
-          <div class="page-title">Finans</div>
+          <div class="page-title" data-i18n="finance">Finans</div>
         </div>
         <div class="pill-tabs">
           <button class="pill active" onclick="finTab('ozet',this)" data-i18n="summary">Özet</button>
@@ -618,17 +618,17 @@ select.inp{cursor:pointer}
         <!-- Özet -->
         <div id="ft-ozet" class="fin-sub-content active">
           <div class="accent-card">
-            <div class="lbl">Bakiye</div>
+            <div class="lbl" data-i18n="balance">Bakiye</div>
             <div class="val" id="f-bal">₺0</div>
             <div class="row">
-              <div><div class="sub-lbl">Gelir</div><div class="sub-val" id="f-inc2">+0</div></div>
-              <div><div class="sub-lbl">Gider</div><div class="sub-val" id="f-exp2">-0</div></div>
+              <div><div class="sub-lbl" data-i18n="income">Gelir</div><div class="sub-val" id="f-inc2">+0</div></div>
+              <div><div class="sub-lbl" data-i18n="expense">Gider</div><div class="sub-val" id="f-exp2">-0</div></div>
             </div>
           </div>
-          <div class="section-lbl">Birikim</div>
+          <div class="section-lbl" data-i18n="savings">Birikim</div>
           <div class="metric-row">
-            <div class="metric-card"><div class="m-lbl">Alacaklar</div><div class="m-val" id="f-alacak" style="color:var(--green)">0</div></div>
-            <div class="metric-card"><div class="m-lbl">Borçlarım</div><div class="m-val" id="f-borc-sum" style="color:var(--red)">0</div></div>
+            <div class="metric-card"><div class="m-lbl" data-i18n="receivables">Alacaklar</div><div class="m-val" id="f-alacak" style="color:var(--green)">0</div></div>
+            <div class="metric-card"><div class="m-lbl" data-i18n="my_debts">Borçlarım</div><div class="m-val" id="f-borc-sum" style="color:var(--red)">0</div></div>
           </div>
         </div>
         <!-- Gelir/Gider -->
@@ -637,8 +637,8 @@ select.inp{cursor:pointer}
             <input type="text" class="inp" id="tx-desc" placeholder="Açıklama" data-i18n-ph="tx_desc_ph" style="margin-bottom:10px">
             <input type="number" class="inp" id="tx-amt" placeholder="Tutar" data-i18n-ph="tx_amount_ph" style="margin-bottom:10px">
             <div style="display:flex;gap:8px;align-items:center">
-              <button class="btn-ghost" id="tx-inc-btn" onclick="setTxType('gelir')">Gelir</button>
-              <button class="btn-ghost active" id="tx-exp-btn" onclick="setTxType('gider')">Gider</button>
+              <button class="btn-ghost" id="tx-inc-btn" onclick="setTxType('gelir')" data-i18n="income">Gelir</button>
+              <button class="btn-ghost active" id="tx-exp-btn" onclick="setTxType('gider')" data-i18n="expense">Gider</button>
               <div style="flex:1"></div>
               <button class="btn-round" onclick="addTx()">+</button>
             </div>
@@ -666,8 +666,8 @@ select.inp{cursor:pointer}
         <!-- Borçlar -->
         <div id="ft-borclar" class="fin-sub-content">
           <div style="display:flex;gap:8px;margin:0 16px 12px">
-            <button class="btn-ghost active" id="debt-alacak-btn" onclick="setDebtType('alacak')">Alacaklar</button>
-            <button class="btn-ghost" id="debt-borc-btn" onclick="setDebtType('borc')">Borçlarım</button>
+            <button class="btn-ghost active" id="debt-alacak-btn" onclick="setDebtType('alacak')" data-i18n="receivables">Alacaklar</button>
+            <button class="btn-ghost" id="debt-borc-btn" onclick="setDebtType('borc')" data-i18n="my_debts">Borçlarım</button>
           </div>
           <div class="card">
             <input type="text" class="inp" id="d-kisi" placeholder="Kişi" data-i18n-ph="debt_person_ph" style="margin-bottom:10px">
@@ -682,7 +682,7 @@ select.inp{cursor:pointer}
       <!-- 2: GÖREVLER -->
       <div class="page" id="p-tasks">
         <div class="page-header">
-          <div class="page-title">Görevler</div>
+          <div class="page-title" data-i18n="tab_tasks">Görevler</div>
         </div>
         <div style="padding:0 16px;margin-bottom:16px">
           <div class="task-ring-section" style="padding:0">
@@ -694,7 +694,7 @@ select.inp{cursor:pointer}
               </svg>
               <div class="ring-center">
                 <div class="ring-pct" id="task-pct">0%</div>
-                <div class="ring-sub" id="task-sub">0/0 Tamamlandı</div>
+                <div class="ring-sub" id="task-sub" data-i18n="tasks_completed_sub">0/0 Tamamlandı</div>
               </div>
             </div>
             <div class="ring-info">
@@ -724,7 +724,7 @@ select.inp{cursor:pointer}
       <!-- 3: ALIŞKANLIKLAR -->
       <div class="page" id="p-habits">
         <div class="page-header">
-          <div class="page-title">Alışkanlıklar</div>
+          <div class="page-title" data-i18n="tab_habits">Alışkanlıklar</div>
         </div>
         <div class="habit-add-box">
           <input type="text" class="inp" id="hab-inp" placeholder="Yeni alışkanlık ekle..." data-i18n-ph="new_habit_ph" style="flex:1" onkeydown="if(event.key==='Enter')addHabit()">
@@ -736,7 +736,7 @@ select.inp{cursor:pointer}
       <!-- 4: UYKU -->
       <div class="page" id="p-sleep">
         <div class="page-header">
-          <div class="page-title">Uyku</div>
+          <div class="page-title" data-i18n="sleep">Uyku</div>
         </div>
         <div class="sleep-avg-card">
           <div class="sleep-avg-left">
@@ -762,23 +762,23 @@ select.inp{cursor:pointer}
       <!-- 5: RAPOR -->
       <div class="page" id="p-report">
         <div class="page-header">
-          <div class="page-title">Rapor</div>
+          <div class="page-title" data-i18n="report">Rapor</div>
           <div class="page-subtitle" id="rp-month"></div>
         </div>
         <div class="report-balance">
-          <div style="font-size:13px;color:rgba(255,255,255,.7)">Bakiye</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.7)" data-i18n="balance">Bakiye</div>
           <div style="font-size:32px;font-weight:800;color:#fff;margin:4px 0" id="rp-bal">₺0</div>
         </div>
         <div class="report-grid">
-          <div class="report-tile"><div class="lbl">Gelir</div><div class="val" id="rp-inc" style="color:var(--green)">+0</div></div>
-          <div class="report-tile"><div class="lbl">Gider</div><div class="val" id="rp-exp" style="color:var(--red)">-0</div></div>
+          <div class="report-tile"><div class="lbl" data-i18n="income">Gelir</div><div class="val" id="rp-inc" style="color:var(--green)">+0</div></div>
+          <div class="report-tile"><div class="lbl" data-i18n="expense">Gider</div><div class="val" id="rp-exp" style="color:var(--red)">-0</div></div>
         </div>
         <div class="card">
           <div class="section-lbl" style="padding:0;margin-bottom:10px" data-i18n="daily_flow">Günlük Akış</div>
           <canvas id="rp-chart" style="max-height:180px"></canvas>
           <div style="display:flex;gap:16px;margin-top:8px">
-            <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text3)"><div style="width:8px;height:8px;border-radius:50%;background:var(--green)"></div>Gelir</div>
-            <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text3)"><div style="width:8px;height:8px;border-radius:50%;background:var(--red)"></div>Gider</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text3)"><div style="width:8px;height:8px;border-radius:50%;background:var(--green)"></div data-i18n="income">Gelir</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text3)"><div style="width:8px;height:8px;border-radius:50%;background:var(--red)"></div><span data-i18n="expense">Gider</span></div>
           </div>
         </div>
       </div>
@@ -786,7 +786,7 @@ select.inp{cursor:pointer}
       <!-- 6: NOTLAR -->
       <div class="page" id="p-notes">
         <div class="page-header" style="display:flex;justify-content:space-between;align-items:center;flex-direction:row;padding-bottom:16px">
-          <div class="page-title">Notlar</div>
+          <div class="page-title" data-i18n="notes">Notlar</div>
           <button class="btn-round" onclick="openNoteModal()">+</button>
         </div>
         <div id="notes-grid" class="notes-grid"></div>
@@ -796,7 +796,7 @@ select.inp{cursor:pointer}
       <!-- 7: SU TAKİBİ -->
       <div class="page" id="p-water">
         <div class="page-header">
-          <div class="page-title">Su</div>
+          <div class="page-title" data-i18n="tab_water">Su</div>
         </div>
         <div class="water-container" onclick="addWater(250)">
           <div class="water-bg"></div>
@@ -817,7 +817,7 @@ select.inp{cursor:pointer}
           <div style="display:flex;justify-content:space-between;align-items:center">
             <div>
               <div style="font-size:15px;font-weight:600;color:var(--text)" data-i18n="water_reminder">Saatlik Hatırlatma</div>
-              <div style="font-size:12px;color:var(--text3);margin-top:2px">Hedef dolana kadar her saat hatırlatma</div>
+              <div style="font-size:12px;color:var(--text3);margin-top:2px" data-i18n="water_reminder_sub">Hedef dolana kadar her saat hatırlatma</div>
             </div>
             <label class="toggle">
               <input type="checkbox" id="water-notif-chk" onchange="toggleWaterNotif(this)">
@@ -830,7 +830,7 @@ select.inp{cursor:pointer}
       <!-- 8: TAKVİM -->
       <div class="page" id="p-calendar">
         <div class="page-header">
-          <div class="page-title">Takvim</div>
+          <div class="page-title" data-i18n="calendar">Takvim</div>
         </div>
         <div class="cal-add-box">
           <input type="text" class="inp" id="cal-title" placeholder="Etkinlik Başlığı" data-i18n-ph="event_title_ph" style="margin-bottom:10px">
@@ -855,7 +855,7 @@ select.inp{cursor:pointer}
       <!-- 9: DAHA FAZLA (Ayarlar vb) -->
       <div class="page" id="p-more">
         <div class="page-header">
-          <div class="page-title">Daha Fazla</div>
+          <div class="page-title" data-i18n="more">Daha Fazla</div>
         </div>
         <!-- Ayarlar -->
         <div class="settings-section">
@@ -1470,6 +1470,7 @@ function rFinance(){
   const borc=data.debts.filter(x=>x.type==='borc').reduce((s,x)=>s+(+x.amount||0),0);
   document.getElementById('f-alacak').textContent='₺'+fmt(alacak);
   document.getElementById('f-borc-sum').textContent='₺'+fmt(borc);
+  rDebtList();
   // Tx list
   const txEl=document.getElementById('tx-list');
   const sorted=[...data.txs].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
@@ -1561,7 +1562,7 @@ function rDebtList(){
         <div class="debt-person">${d.person||d.kisi||''}</div>
         <button class="task-del" onclick="delDebtItem('${d.id}')">🗑</button>
       </div>
-      <div class="debt-meta">${d.type==='alacak'?'Alacak':'Borç'} · ${d.date||''} · Vade: ${d.due||d.vade||'—'}</div>
+      <div class="debt-meta">${d.type==='alacak'?t('debt_receivable'):t('debt_payable')} · ${d.date||''} · ${t('due_label')}: ${d.due||d.vade||'—'}</div>
       <div class="debt-amt" style="color:${d.type==='alacak'?'var(--green)':'var(--red)'}">₺${fmt(d.amount)}</div>
     </div>`).join('');
 }
@@ -1712,7 +1713,7 @@ function addCalEvent(){
   if(!data.calEvents[date])data.calEvents[date]=[];
   data.calEvents[date].push({id:Date.now()+'',text:title,type:'event',time,remind:selectedRemind});
   save();document.getElementById('cal-title').value='';
-  rCalendar();rHome();showToast('Etkinlik eklendi');
+  rCalendar();rHome();showToast(t('event_added'));
 }
 function rCalendar(){
   const el=document.getElementById('cal-upcoming-list');
@@ -1724,7 +1725,7 @@ function rCalendar(){
   const upcoming=[];
   for(let i=0;i<30;i++){
     const d=new Date();d.setDate(d.getDate()+i);
-    const ds=d.toISOString().slice(0,10);
+    const ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
     (data.calEvents[ds]||[]).forEach(e=>upcoming.push({...e,date:ds}));
   }
   if(!upcoming.length){el.innerHTML=`<div style="text-align:center;padding:30px;color:var(--text3);font-size:14px">${t('no_events')}</div>`;return;}
@@ -1791,6 +1792,7 @@ const STRINGS={
     finance:'Finans', summary:'Özet', income_expense:'Gelir/Gider',
     savings:'Birikim', debts:'Borçlar',
     receivables:'Alacaklar', my_debts:'Borçlarım',
+    debt_receivable:'Alacak', debt_payable:'Borç', due_label:'Vade',
     currency:'Para Birimi',
     inv_deposit_ph:'Yatır / Çek',
     inv_name_ph:'Hedef Adı', inv_goal_ph:'Hedef',
@@ -1799,7 +1801,7 @@ const STRINGS={
     // Görevler
     new_task_ph:'Yeni görev ekle...',
     priority_high:'Yüksek', priority_mid:'Orta', priority_low:'Düşük',
-    tasks_completed:'Tamamlandı', tasks_pending:'Bekliyor',
+    tasks_completed:'Tamamlandı', tasks_completed_sub:'0/0 Tamamlandı', tasks_pending:'Bekliyor',
     no_tasks:'📋 Bugün görev yok', no_tasks_sub:'Yukarıdan ekleyerek başla',
     all_done:'🎉 Tüm görevler tamamlandı!', all_done_sub:'Harika bir gün geçirdin',
     // Alışkanlıklar
@@ -1859,6 +1861,7 @@ const STRINGS={
     finance:'Finance', summary:'Summary', income_expense:'Income/Expense',
     savings:'Savings', debts:'Debts',
     receivables:'Receivables', my_debts:'My Debts',
+    debt_receivable:'Receivable', debt_payable:'Debt', due_label:'Due',
     currency:'Currency',
     inv_deposit_ph:'Deposit / Withdraw',
     inv_name_ph:'Goal Name', inv_goal_ph:'Target',
@@ -1867,7 +1870,7 @@ const STRINGS={
     // Tasks
     new_task_ph:'Add new task...',
     priority_high:'High', priority_mid:'Medium', priority_low:'Low',
-    tasks_completed:'Completed', tasks_pending:'Pending',
+    tasks_completed:'Completed', tasks_completed_sub:'0/0 Completed', tasks_pending:'Pending',
     no_tasks:'📋 No tasks today', no_tasks_sub:'Add a task above to get started',
     all_done:'🎉 All tasks completed!', all_done_sub:'Great work today',
     // Habits
