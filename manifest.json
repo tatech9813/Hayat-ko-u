@@ -1,12 +1,12 @@
 {
-  "name": "Hayat Koçu",
-  "short_name": "Hayat Koçu",
-  "description": "Kişisel hayat koçluğu uygulaması",
+  "name": "Velo",
+  "short_name": "Velo",
+  "description": "Personal life coach app",
   "start_url": "/Hayat-ko-u/",
   "scope": "/Hayat-ko-u/",
   "display": "standalone",
-  "background_color": "#0a0a0f",
-  "theme_color": "#0a0a0f",
+  "background_color": "#6366f1",
+  "theme_color": "#6366f1",
   "orientation": "portrait-primary",
   "icons": [
     {
