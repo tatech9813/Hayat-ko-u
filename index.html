@@ -1,16 +1,16 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Hayat Koçu</title>
+<title>Velo</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%236366f1'/%3E%3Cpath d='M7 20 L16 9 L25 20' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M12 20 L16 14.5 L20 20' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round' opacity='0.45'/%3E%3C/svg%3E">
 <meta name="theme-color" content="#1a1a1a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Hayat Koçu">
+<meta name="apple-mobile-web-app-title" content="Velo">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
@@ -219,13 +219,13 @@ circle.ring-fill{transition:stroke-dashoffset .7s var(--ease-out),stroke .4s}
   transition:transform .35s cubic-bezier(.4,0,.2,1);
   will-change:transform;
   touch-action:pan-y;
-  width:1000%;
+  width:calc(var(--visible-tabs, 10) * 100%);
   height:100%;
   position:absolute;
   top:0;left:0;
 }
 .swipe-container .page{
-  width:10%;
+  width:calc(100% / var(--visible-tabs, 10));
   flex:none;
   height:100%;
   overflow-y:auto;
@@ -233,12 +233,23 @@ circle.ring-fill{transition:stroke-dashoffset .7s var(--ease-out),stroke .4s}
   padding:0 0 calc(var(--tab-h) + 16px);
   position:relative;
 }
+.swipe-container .page.tab-hidden{display:none}
+.tab-btn.tab-hidden{display:none}
 .swipe-container .page::-webkit-scrollbar{display:none}
 
 /* PAGE HEADER */
 .page-header{padding:56px 20px 20px;position:sticky;top:0;z-index:10;background:var(--bg)}
 .page-title{font-size:28px;font-weight:800;color:var(--text);letter-spacing:-.5px}
 .page-subtitle{font-size:13px;color:var(--text3);margin-top:2px}
+
+/* BUDGET */
+.budget-bar-wrap{background:var(--bg3);border-radius:99px;height:8px;overflow:hidden;margin:6px 0 2px}
+.budget-bar-fill{height:100%;border-radius:99px;transition:width .5s var(--ease-out)}
+.budget-bar-fill.ok{background:var(--green)}
+.budget-bar-fill.warn{background:#e0a020}
+.budget-bar-fill.over{background:var(--red)}
+.cat-chip{padding:6px 14px;border-radius:99px;border:1.5px solid var(--border);background:var(--bg3);color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif}
+.cat-chip.active{background:var(--accent);color:var(--bg);border-color:var(--accent)}
 
 #tabbar{
   height:var(--tab-h);
@@ -324,11 +335,11 @@ select.inp{cursor:pointer}
   transition:transform .35s cubic-bezier(.4,0,.2,1);
   will-change:transform;
   touch-action:pan-y;
-  width:1000%;
+  width:calc(var(--visible-tabs, 10) * 100%);
   height:100%;
 }
 .swipe-container .page{
-  width:10%;
+  width:calc(100% / var(--visible-tabs, 10));
   flex:none;
   height:100%;
   overflow-y:auto;
@@ -552,6 +563,14 @@ select.inp{cursor:pointer}
       <!-- 0: ANASAYFA -->
       <div class="page" id="p-home">
         <div class="home-greeting">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="34" height="34" rx="9" fill="#6366f1"/>
+              <path d="M7 22 L17 9 L27 22" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 22 L17 15 L22 22" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"/>
+            </svg>
+            <span style="font-size:22px;font-weight:800;color:var(--text);letter-spacing:-0.5px">Velo</span>
+          </div>
           <div class="home-date" id="h-date"></div>
           <div class="home-name" id="h-name" data-i18n="home">Hoşgeldin 👋</div>
           <div class="home-weather" id="h-weather">⛅ <span data-i18n="loading">Yükleniyor...</span></div>
@@ -567,19 +586,19 @@ select.inp{cursor:pointer}
         </div>
         <!-- Görev & Alışkanlık grid -->
         <div class="home-grid">
-          <div class="home-tile" onclick="goTab(2)">
+          <div class="home-tile" id="h-shortcut-tasks" onclick="goTab(2)">
             <div class="t-icon">✔️</div>
             <div class="t-val" id="h-tasks">0/0</div>
             <div class="t-lbl" data-i18n="tasks_tab">Görevler</div>
           </div>
-          <div class="home-tile" onclick="goTab(3)">
+          <div class="home-tile" id="h-shortcut-habits" onclick="goTab(3)">
             <div class="t-icon">🔥</div>
             <div class="t-val" id="h-habits">0/0</div>
             <div class="t-lbl" data-i18n="habits_tab">Alışkanlıklar</div>
           </div>
         </div>
         <!-- Uyku mini -->
-        <div class="sleep-card-home" onclick="goTab(4)">
+        <div class="sleep-card-home" id="h-shortcut-sleep" onclick="goTab(4)">
           <div style="display:flex;justify-content:space-between;align-items:flex-start">
             <div>
               <div style="font-size:12px;color:var(--text3)" data-i18n="sleep_home">Uyku · 7g</div>
@@ -590,7 +609,7 @@ select.inp{cursor:pointer}
           <canvas id="h-sleep-chart" style="width:100%;height:60px;max-height:60px;display:block"></canvas>
         </div>
         <!-- Su takibi mini -->
-        <div class="card" onclick="goTab(7)" style="display:flex;justify-content:space-between;align-items:center">
+        <div class="card" id="h-shortcut-water" onclick="goTab(7)" style="display:flex;justify-content:space-between;align-items:center">
           <div>
             <div style="font-size:12px;color:var(--text3)" data-i18n="water_home">Su Takibi</div>
             <div style="font-size:24px;font-weight:800;color:var(--text);margin-top:4px"><span id="h-water">0</span> <span style="font-size:13px;color:var(--text3)">ml</span></div>
@@ -614,6 +633,7 @@ select.inp{cursor:pointer}
           <button class="pill" onclick="finTab('gelir-gider',this)" data-i18n="income_expense">Gelir/Gider</button>
           <button class="pill" onclick="finTab('birikim',this)" data-i18n="savings">Birikim</button>
           <button class="pill" onclick="finTab('borclar',this)" data-i18n="debts">Borçlar</button>
+          <button class="pill" onclick="finTab('butce',this)" data-i18n="budget_tab">Bütçe</button>
         </div>
         <!-- Özet -->
         <div id="ft-ozet" class="fin-sub-content active">
@@ -630,12 +650,17 @@ select.inp{cursor:pointer}
             <div class="metric-card"><div class="m-lbl" data-i18n="receivables">Alacaklar</div><div class="m-val" id="f-alacak" style="color:var(--green)">0</div></div>
             <div class="metric-card"><div class="m-lbl" data-i18n="my_debts">Borçlarım</div><div class="m-val" id="f-borc-sum" style="color:var(--red)">0</div></div>
           </div>
+          <div id="budget-summary-section" style="display:none">
+            <div class="section-lbl" data-i18n="budget_summary_lbl">Bu Ay Bütçe</div>
+            <div id="budget-summary-list"></div>
+          </div>
         </div>
         <!-- Gelir/Gider -->
         <div id="ft-gelir-gider" class="fin-sub-content">
           <div class="card">
             <input type="text" class="inp" id="tx-desc" placeholder="Açıklama" data-i18n-ph="tx_desc_ph" style="margin-bottom:10px">
             <input type="number" class="inp" id="tx-amt" placeholder="Tutar" data-i18n-ph="tx_amount_ph" style="margin-bottom:10px">
+            <div id="tx-cat-row" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>
             <div style="display:flex;gap:8px;align-items:center">
               <button class="btn-ghost" id="tx-inc-btn" onclick="setTxType('gelir')" data-i18n="income">Gelir</button>
               <button class="btn-ghost active" id="tx-exp-btn" onclick="setTxType('gider')" data-i18n="expense">Gider</button>
@@ -676,6 +701,24 @@ select.inp{cursor:pointer}
             <button class="btn-accent" onclick="addDebt()">Ekle</button>
           </div>
           <div id="debt-list"></div>
+        </div>
+        <!-- Bütçe -->
+        <div id="ft-butce" class="fin-sub-content">
+          <div class="card">
+            <div style="font-size:13px;color:var(--text3);margin-bottom:10px" data-i18n="budget_set_hint">Kategoriye aylık harcama limiti belirle</div>
+            <div id="budget-cat-select" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>
+            <div style="display:flex;gap:8px">
+              <input type="number" class="inp" id="budget-limit-inp" placeholder="Limit (₺)" data-i18n-ph="budget_limit_ph" style="flex:1">
+              <button class="btn-accent" onclick="setBudgetLimit()" data-i18n="save_btn">Kaydet</button>
+            </div>
+          </div>
+          <div class="card" style="padding:14px 16px">
+            <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
+              <input type="text" class="inp" id="new-cat-inp" placeholder="Yeni kategori adı" data-i18n-ph="new_cat_ph" style="flex:1">
+              <button class="btn-round" onclick="addCustomCategory()">+</button>
+            </div>
+          </div>
+          <div id="budget-list"></div>
         </div>
       </div>
 
@@ -814,6 +857,13 @@ select.inp{cursor:pointer}
           <button class="btn-accent" style="flex:1" onclick="addWater(250)" data-i18n="water_add_btn">+ 1 bardak (250ml)</button>
         </div>
         <div class="card">
+          <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:8px" data-i18n="water_goal_label">Günlük Hedef</div>
+          <div style="display:flex;gap:10px">
+            <input type="number" class="inp" id="water-goal-inp" min="250" max="10000" step="50" style="flex:1" placeholder="2500">
+            <button class="btn-accent" onclick="setWaterGoal()" data-i18n="save_btn">Kaydet</button>
+          </div>
+        </div>
+        <div class="card">
           <div style="display:flex;justify-content:space-between;align-items:center">
             <div>
               <div style="font-size:15px;font-weight:600;color:var(--text)" data-i18n="water_reminder">Saatlik Hatırlatma</div>
@@ -884,6 +934,11 @@ select.inp{cursor:pointer}
           <div class="theme-row" id="theme-list"></div>
         </div>
         <div class="settings-section">
+          <div class="settings-row-lbl" data-i18n="tab_manager_lbl">Sekmeler</div>
+          <div class="settings-label-sub" style="padding:0 16px 10px" data-i18n="tab_manager_sub">Kullanmadığın sekmeleri kapatabilirsin. Anasayfa ve Daha Fazla her zaman açık kalır.</div>
+          <div id="tab-manager-list"></div>
+        </div>
+        <div class="settings-section">
           <div class="settings-row-lbl" data-i18n="notifications">Bildirimler</div>
           <div class="settings-row">
             <div>
@@ -915,7 +970,7 @@ select.inp{cursor:pointer}
             </label>
           </div>
         </div>
-        <div style="text-align:center;padding:20px;color:var(--text3);font-size:12px">Hayat Koçu v1.0</div>
+        <div style="text-align:center;padding:20px;color:var(--text3);font-size:12px">Velo v1.0</div>
       </div>
 
     </div><!-- /swipe-cont -->
@@ -985,9 +1040,41 @@ select.inp{cursor:pointer}
 // CORE DATA
 // ═══════════════════════════════════════
 const KEY='hayatkocu_v1';
-let data={tasks:[],habits:[],txs:[],debts:[],investments:[],sleep:[],calEvents:{},notes:[],water:{today:'',ml:0}};
+let data={tasks:[],habits:[],txs:[],debts:[],investments:[],sleep:[],calEvents:{},notes:[],water:{today:'',ml:0},budgets:{},customCategories:[]};
 let currentLang='tr';
 let currentTab=0;
+// Tab visibility: index 0 (Anasayfa) and 9 (Daha Fazla) are always locked visible
+const LOCKED_TABS=[0,9];
+const DEFAULT_CATEGORIES=['Yemek','Ulaşım','Faturalar','Alışveriş','Eğlence','Diğer'];
+function getCategories(){
+  return [...DEFAULT_CATEGORIES,...(data.customCategories||[])];
+}
+function getBudgetMonth(){
+  return td().slice(0,7);
+}
+function getCatSpend(cat,month){
+  return data.txs.filter(x=>x.type==='gider'&&x.category===cat&&(x.date||'').slice(0,7)===month).reduce((s,x)=>s+(+x.amount||0),0);
+}
+const ALL_TAB_KEYS=['tab_home','tab_finance','tab_tasks','tab_habits','tab_sleep','tab_report','tab_notes','tab_water','tab_calendar','tab_more'];
+function getHiddenTabs(){
+  try{return JSON.parse(localStorage.getItem('hk_hidden_tabs')||'[]').filter(i=>!LOCKED_TABS.includes(i));}
+  catch(e){return [];}
+}
+function setHiddenTabs(arr){
+  localStorage.setItem('hk_hidden_tabs',JSON.stringify(arr.filter(i=>!LOCKED_TABS.includes(i))));
+}
+function getVisibleTabIndexes(){
+  const hidden=getHiddenTabs();
+  const all=[0,1,2,3,4,5,6,7,8,9];
+  return all.filter(i=>!hidden.includes(i));
+}
+function logicalToVisiblePos(idx){
+  return getVisibleTabIndexes().indexOf(idx);
+}
+function visiblePosToLogical(pos){
+  const vis=getVisibleTabIndexes();
+  return vis[pos];
+}
 let txType='gider';
 let debtType='alacak';
 let invCur='TRY';
@@ -1004,6 +1091,8 @@ const THEMES=[
   {name:'Gece Yarısı (Koyu)',key:'midnight',colors:['#0a0514','#a78bfa','#ede8ff']},
   {name:'Kar Beyazı (Açık)',key:'snow',colors:['#f4f4f4','#0d8a5a','#111111']},
   {name:'Şeftali (Açık)',key:'peach',colors:['#faf2ec','#b84a20','#1e1008']},
+  {name:'Siyah-Beyaz',key:'mono_dark',colors:['#000000','#ffffff','#ffffff']},
+  {name:'Beyaz-Siyah',key:'mono_light',colors:['#ffffff','#000000','#000000']},
 ];
 
 const THEME_VARS={
@@ -1012,14 +1101,25 @@ const THEME_VARS={
   midnight:{'--bg':'#06040e','--bg2':'#0e0a1c','--bg3':'#160f2a','--text':'#ede8ff','--text2':'#7a60c0','--text3':'#3e2870','--accent':'#a78bfa','--accent2':'#c084fc','--accent-bg':'rgba(167,139,250,0.12)','--green':'#4caf7d','--red':'#fb7185'},
   snow:{'--bg':'#f2f2f4','--bg2':'#ffffff','--bg3':'#e8e8ec','--text':'#111116','--text2':'#505060','--text3':'#909098','--accent':'#0d8a5a','--accent2':'#1a9e6a','--accent-bg':'rgba(13,138,90,0.10)','--green':'#0d8a5a','--red':'#c42840','--border':'rgba(0,0,0,0.09)','--border2':'rgba(0,0,0,0.16)'},
   peach:{'--bg':'#faf2ec','--bg2':'#fffaf6','--bg3':'#f0e4d8','--text':'#1e1008','--text2':'#8a4a28','--text3':'#c09070','--accent':'#b84a20','--accent2':'#d05a28','--accent-bg':'rgba(184,74,32,0.10)','--green':'#1a6b30','--red':'#c0282a','--border':'rgba(160,80,40,0.09)','--border2':'rgba(160,80,40,0.18)'},
+  mono_dark:{'--bg':'#000000','--bg2':'#161616','--bg3':'#262626','--text':'#ffffff','--text2':'#b0b0b0','--text3':'#717171','--accent':'#ffffff','--accent2':'#e0e0e0','--accent-bg':'rgba(255,255,255,0.12)','--green':'#4caf7d','--red':'#f06868','--border':'rgba(255,255,255,0.12)','--border2':'rgba(255,255,255,0.22)'},
+  mono_light:{'--bg':'#ffffff','--bg2':'#f5f5f5','--bg3':'#e8e8e8','--text':'#000000','--text2':'#4a4a4a','--text3':'#8a8a8a','--accent':'#000000','--accent2':'#2a2a2a','--accent-bg':'rgba(0,0,0,0.08)','--green':'#1a7a45','--red':'#c4282a','--border':'rgba(0,0,0,0.10)','--border2':'rgba(0,0,0,0.20)'},
 };
 
 function td(){const n=new Date();return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');}
 function fmt(n){return Number(n).toLocaleString('tr-TR');}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}}
+function save(){
+  try{
+    localStorage.setItem(KEY,JSON.stringify(data));
+    return true;
+  }catch(e){
+    console.error('SAVE FAILED:',e);
+    showToast(t('save_failed'),'error');
+    return false;
+  }
+}
 
 function load(){
-  try{const r=localStorage.getItem(KEY);if(r){const d=JSON.parse(r);Object.assign(data,{tasks:[],habits:[],txs:[],debts:[],investments:[],sleep:[],calEvents:{},notes:[],water:{today:'',ml:0},...d});}}catch(e){}
+  try{const r=localStorage.getItem(KEY);if(r){const d=JSON.parse(r);Object.assign(data,{tasks:[],habits:[],txs:[],debts:[],investments:[],sleep:[],calEvents:{},notes:[],water:{today:'',ml:0},budgets:{},customCategories:[],...d});}}catch(e){}
   currentLang=localStorage.getItem('hk_lang')||'tr';
   const theme=localStorage.getItem('hk_theme')||'obsidyen';
   applyTheme(theme);
@@ -1036,6 +1136,8 @@ function load(){
   buildThemeList();
   renderAll();
   applyLang();
+  applyTabVisibility();
+  buildTabManager();
   updateNotifStatus();
   setupSwipe();
   setupCalDate();
@@ -1048,10 +1150,40 @@ function renderAll(){
 // ═══════════════════════════════════════
 // NAVIGATION
 // ═══════════════════════════════════════
+function applyTabVisibility(){
+  const hidden=getHiddenTabs();
+  const visCount=10-hidden.length;
+  document.documentElement.style.setProperty('--visible-tabs',visCount);
+  for(let i=0;i<10;i++){
+    const btn=document.getElementById('tab-'+i);
+    const page=document.querySelectorAll('.swipe-container .page')[i];
+    const isHidden=hidden.includes(i);
+    if(btn)btn.classList.toggle('tab-hidden',isHidden);
+    if(page)page.classList.toggle('tab-hidden',isHidden);
+  }
+  // Home screen shortcuts to specific tabs must hide in sync
+  const shortcutMap={2:'h-shortcut-tasks',3:'h-shortcut-habits',4:'h-shortcut-sleep',7:'h-shortcut-water'};
+  Object.entries(shortcutMap).forEach(([idx,elId])=>{
+    const el=document.getElementById(elId);
+    if(el)el.style.display=hidden.includes(+idx)?'none':'';
+  });
+  // If current tab got hidden, jump to home
+  if(hidden.includes(currentTab))currentTab=0;
+  const pos=logicalToVisiblePos(currentTab);
+  if(pos>=0){
+    document.getElementById('swipe-cont').style.transition='none';
+    document.getElementById('swipe-cont').style.transform=`translateX(-${pos*(100/visCount)}%)`;
+    void document.getElementById('swipe-cont').offsetWidth;
+    document.getElementById('swipe-cont').style.transition='';
+  }
+}
 function goTab(idx){
+  if(getHiddenTabs().includes(idx))return; // safety: can't navigate to a hidden tab
   const prev=currentTab;
   document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===idx));
-  document.getElementById('swipe-cont').style.transform=`translateX(-${idx*10}%)`;
+  const pos=logicalToVisiblePos(idx);
+  const visCount=getVisibleTabIndexes().length;
+  document.getElementById('swipe-cont').style.transform=`translateX(-${pos*(100/visCount)}%)`;
   currentTab=idx;
   // Page enter animation
   const pages=document.querySelectorAll('.swipe-container .page');
@@ -1106,11 +1238,13 @@ function setupSwipe(){
     velX=(cx-lastX)/(now-lastT+1);
     lastX=cx;lastT=now;
     // Rubber band at edges
+    const visCount=getVisibleTabIndexes().length;
+    const pos=logicalToVisiblePos(currentTab);
     let raw=dx;
-    const atStart=currentTab===0&&dx>0;
-    const atEnd=currentTab===9&&dx<0;
+    const atStart=pos===0&&dx>0;
+    const atEnd=pos===visCount-1&&dx<0;
     if(atStart||atEnd) raw=dx*0.3;
-    const base=currentTab*10;
+    const base=pos*(100/visCount);
     cont.style.transform=`translateX(calc(-${base}% + ${raw}px))`;
   },{passive:false});
 
@@ -1120,11 +1254,13 @@ function setupSwipe(){
     if(!isHoriz){cont.style.transition='';goTab(currentTab);return;}
     const dx=e.changedTouches[0].clientX-startX;
     cont.style.transition='';
+    const visCount=getVisibleTabIndexes().length;
+    const pos=logicalToVisiblePos(currentTab);
     // Threshold: distance OR velocity
-    const goNext=dx<-40&&currentTab<9||(velX<-0.5&&currentTab<9);
-    const goPrev=dx>40&&currentTab>0||(velX>0.5&&currentTab>0);
-    if(goNext)goTab(currentTab+1);
-    else if(goPrev)goTab(currentTab-1);
+    const goNext=dx<-40&&pos<visCount-1||(velX<-0.5&&pos<visCount-1);
+    const goPrev=dx>40&&pos>0||(velX>0.5&&pos>0);
+    if(goNext)goTab(visiblePosToLogical(pos+1));
+    else if(goPrev)goTab(visiblePosToLogical(pos-1));
     else goTab(currentTab);
   });
 
@@ -1134,15 +1270,19 @@ function setupSwipe(){
   cont.addEventListener('mousemove',e=>{
     if(!mDown)return;
     const dx=e.clientX-mStartX;
-    const base=currentTab*10;
+    const visCount=getVisibleTabIndexes().length;
+    const pos=logicalToVisiblePos(currentTab);
+    const base=pos*(100/visCount);
     cont.style.transform=`translateX(calc(-${base}% + ${dx}px))`;
   });
   cont.addEventListener('mouseup',e=>{
     if(!mDown)return;mDown=false;
     const dx=e.clientX-mStartX;
     cont.style.transition='';
-    if(dx<-60&&currentTab<9)goTab(currentTab+1);
-    else if(dx>60&&currentTab>0)goTab(currentTab-1);
+    const visCount=getVisibleTabIndexes().length;
+    const pos=logicalToVisiblePos(currentTab);
+    if(dx<-60&&pos<visCount-1)goTab(visiblePosToLogical(pos+1));
+    else if(dx>60&&pos>0)goTab(visiblePosToLogical(pos-1));
     else goTab(currentTab);
   });
   cont.addEventListener('mouseleave',e=>{if(mDown){mDown=false;cont.style.transition='';goTab(currentTab);}});
@@ -1471,6 +1611,11 @@ function rFinance(){
   document.getElementById('f-alacak').textContent='₺'+fmt(alacak);
   document.getElementById('f-borc-sum').textContent='₺'+fmt(borc);
   rDebtList();
+  // Category chips for tx form
+  buildCatChips('tx-cat-row',activeTxCat,'setActiveTxCat',false);
+  // Budget
+  rBudgetList();
+  rBudgetSummary();
   // Tx list
   const txEl=document.getElementById('tx-list');
   const sorted=[...data.txs].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
@@ -1491,9 +1636,20 @@ function addTx(){
   const desc=document.getElementById('tx-desc').value.trim();
   const amt=parseFloat(document.getElementById('tx-amt').value);
   if(!desc||!amt)return;
-  data.txs.push({id:Date.now()+'',desc,description:desc,amount:amt,type:txType,date:td(),category:'genel'});
-  save();document.getElementById('tx-desc').value='';document.getElementById('tx-amt').value='';
-  rFinance();rHome();showToast(t('tx_added'));
+  const cat=txType==='gider'?activeTxCat:'gelir';
+  data.txs.push({id:Date.now()+'',desc,description:desc,amount:amt,type:txType,date:td(),category:cat});
+  save();
+  document.getElementById('tx-desc').value='';
+  document.getElementById('tx-amt').value='';
+  rFinance();rHome();rBudgetSummary();
+  showToast(t('tx_added'));
+  // Budget warning
+  if(txType==='gider'&&data.budgets&&data.budgets[cat]>0){
+    const spend=getCatSpend(cat,getBudgetMonth());
+    const limit=data.budgets[cat];
+    if(spend>=limit) showToast(`⚠️ ${cat}: ${t('budget_over')}`, 'error');
+    else if(spend>=limit*0.8) showToast(`⚠️ ${cat}: ${t('budget_warn')}`, 'error');
+  }
 }
 function delTx(id){data.txs=data.txs.filter(x=>x.id!==id);save();rFinance();rHome();}
 
@@ -1551,6 +1707,127 @@ function depInv(id,dir){
   save();inp.value='';rInvList();
 }
 function delInv(id){data.investments=data.investments.filter(x=>x.id!==id);save();rInvList();}
+
+// ═══════════════════════════════════════
+// BUDGET
+// ═══════════════════════════════════════
+let activeTxCat='Diğer';
+let activeBudgetCat=null;
+
+function buildCatChips(containerId,activeCat,onClickFn,showDelete){
+  const el=document.getElementById(containerId);if(!el)return;
+  const cats=getCategories();
+  if(!activeCat||!cats.includes(activeCat)){activeCat=cats[0];}
+  el.innerHTML=cats.map(c=>`
+    <button class="cat-chip${c===activeCat?' active':''}" onclick="${onClickFn}('${c}')">${c}${showDelete&&!DEFAULT_CATEGORIES.includes(c)?` <span onclick="event.stopPropagation();delCustomCategory('${c}')" style="margin-left:4px;opacity:.6">×</span>`:''}
+    </button>`).join('');
+}
+
+function setActiveTxCat(cat){
+  activeTxCat=cat;
+  buildCatChips('tx-cat-row',activeTxCat,'setActiveTxCat',false);
+}
+
+function setActiveBudgetCat(cat){
+  activeBudgetCat=cat;
+  buildCatChips('budget-cat-select',activeBudgetCat,'setActiveBudgetCat',true);
+  const limit=data.budgets[cat]||'';
+  const inp=document.getElementById('budget-limit-inp');
+  if(inp)inp.value=limit||'';
+}
+
+function setBudgetLimit(){
+  const v=parseFloat(document.getElementById('budget-limit-inp').value);
+  if(!activeBudgetCat)return;
+  if(!v||v<=0){
+    // Clear limit if empty/zero
+    delete data.budgets[activeBudgetCat];
+  } else {
+    if(!data.budgets)data.budgets={};
+    data.budgets[activeBudgetCat]=v;
+  }
+  save();rBudgetList();rBudgetSummary();
+  showToast(t('budget_saved'));
+}
+
+function addCustomCategory(){
+  const inp=document.getElementById('new-cat-inp');
+  const name=inp.value.trim();
+  if(!name)return;
+  if(getCategories().includes(name)){showToast(t('cat_exists'),'error');return;}
+  if(!data.customCategories)data.customCategories=[];
+  data.customCategories.push(name);
+  save();inp.value='';
+  buildCatChips('tx-cat-row',activeTxCat,'setActiveTxCat',false);
+  setActiveBudgetCat(activeBudgetCat||name);
+  showToast(t('cat_added'));
+}
+
+function delCustomCategory(name){
+  data.customCategories=(data.customCategories||[]).filter(c=>c!==name);
+  delete data.budgets[name];
+  save();
+  if(activeBudgetCat===name)activeBudgetCat=getCategories()[0];
+  if(activeTxCat===name)activeTxCat='Diğer';
+  buildCatChips('tx-cat-row',activeTxCat,'setActiveTxCat',false);
+  setActiveBudgetCat(activeBudgetCat);
+  rBudgetList();rBudgetSummary();
+}
+
+function rBudgetList(){
+  const el=document.getElementById('budget-list');if(!el)return;
+  const cats=getCategories();
+  const month=getBudgetMonth();
+  const withLimit=cats.filter(c=>data.budgets&&data.budgets[c]>0);
+  if(!withLimit.length){
+    el.innerHTML=`<div style="text-align:center;color:var(--text3);padding:24px 16px;font-size:14px">${t('budget_empty')}</div>`;
+    return;
+  }
+  el.innerHTML=withLimit.map(c=>{
+    const limit=data.budgets[c];
+    const spend=getCatSpend(c,month);
+    const pct=Math.min(100,Math.round(spend/limit*100));
+    const cls=pct>=100?'over':pct>=80?'warn':'ok';
+    return `<div class="card" style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-weight:600;color:var(--text)">${c}</div>
+        <div style="font-size:12px;color:var(--text3)">${fmt(spend)} / ${fmt(limit)} ₺</div>
+      </div>
+      <div class="budget-bar-wrap"><div class="budget-bar-fill ${cls}" style="width:${pct}%"></div></div>
+      <div style="font-size:11px;color:var(--text3);text-align:right">${pct}%${pct>=100?' ⚠️':''}</div>
+    </div>`;
+  }).join('');
+  // also rebuild cat select chips
+  if(!activeBudgetCat)activeBudgetCat=cats[0];
+  buildCatChips('budget-cat-select',activeBudgetCat,'setActiveBudgetCat',true);
+}
+
+function rBudgetSummary(){
+  const section=document.getElementById('budget-summary-section');
+  const list=document.getElementById('budget-summary-list');
+  if(!section||!list)return;
+  const cats=getCategories();
+  const month=getBudgetMonth();
+  const withLimit=cats.filter(c=>data.budgets&&data.budgets[c]>0);
+  if(!withLimit.length){section.style.display='none';return;}
+  section.style.display='';
+  // Show top 3 by % spent
+  const sorted=withLimit.map(c=>{
+    const limit=data.budgets[c];
+    const spend=getCatSpend(c,month);
+    return {c,limit,spend,pct:Math.min(100,Math.round(spend/limit*100))};
+  }).sort((a,b)=>b.pct-a.pct).slice(0,3);
+  list.innerHTML=sorted.map(({c,limit,spend,pct})=>{
+    const cls=pct>=100?'over':pct>=80?'warn':'ok';
+    return `<div style="margin:0 16px 10px">
+      <div style="display:flex;justify-content:space-between">
+        <span style="font-size:14px;color:var(--text)">${c}</span>
+        <span style="font-size:12px;color:var(--text3)">${fmt(spend)} / ${fmt(limit)} ₺ ${pct>=100?'⚠️':''}</span>
+      </div>
+      <div class="budget-bar-wrap"><div class="budget-bar-fill ${cls}" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('');
+}
 
 function rDebtList(){
   const el=document.getElementById('debt-list');
@@ -1657,21 +1934,34 @@ document.getElementById('note-modal').addEventListener('click',function(e){if(e.
 // ═══════════════════════════════════════
 // WATER
 // ═══════════════════════════════════════
+function getWaterGoal(){
+  return parseInt(localStorage.getItem('hk_water_goal'))||2500;
+}
+function setWaterGoal(){
+  const v=parseInt(document.getElementById('water-goal-inp').value);
+  if(!v||v<250||v>10000){showToast(t('water_goal_invalid'),'error');return;}
+  localStorage.setItem('hk_water_goal',v);
+  rWater();rHome();
+  showToast(t('water_goal_saved'));
+}
 function rWater(){
   const ml=data.water.ml||0;
-  const goal=2500;
+  const goal=getWaterGoal();
   const pct=Math.min(100,Math.round(ml/goal*100));
   document.getElementById('water-fill').style.height=pct+'%';
   document.getElementById('water-pct').textContent=pct+'%';
   document.getElementById('water-ml').textContent=`${ml} / ${goal} ml`;
+  const goalInp=document.getElementById('water-goal-inp');
+  if(goalInp&&document.activeElement!==goalInp)goalInp.value=goal;
 }
 function addWater(ml){
   if(!data.water)data.water={today:td(),ml:0};
+  const goal=getWaterGoal();
   const prev=data.water.ml||0;
-  data.water.ml=Math.min(2500,prev+ml);
+  data.water.ml=Math.min(goal,prev+ml);
   save();rWater();rHome();
   haptic('medium');
-  if(data.water.ml>=2500&&prev<2500){
+  if(data.water.ml>=goal&&prev<goal){
     showToast(t('water_goal_reached'));
     haptic('success');
     stopWaterNotif();
@@ -1687,9 +1977,10 @@ function toggleWaterNotif(chk){
 function startWaterNotif(){
   stopWaterNotif();
   waterNotifTimer=setInterval(()=>{
-    if((data.water.ml||0)>=2500)return;
+    const goal=getWaterGoal();
+    if((data.water.ml||0)>=goal)return;
     if(Notification.permission==='granted'){
-      navigator.serviceWorker?.controller?.postMessage({type:'SHOW_NOTIFICATION',title:'💧 Su İçme Zamanı!',body:`Bugün ${data.water.ml||0}ml içtin. Hedef: 2500ml`,tag:'water-reminder'});
+      navigator.serviceWorker?.controller?.postMessage({type:'SHOW_NOTIFICATION',title:'💧 Su İçme Zamanı!',body:`Bugün ${data.water.ml||0}ml içtin. Hedef: ${goal}ml`,tag:'water-reminder'});
     }
   },3600000);
 }
@@ -1747,6 +2038,35 @@ function delCalEvt(date,id){
   save();rCalendar();rHome();
 }
 
+function buildTabManager(){
+  const hidden=getHiddenTabs();
+  const el=document.getElementById('tab-manager-list');
+  if(!el)return;
+  el.innerHTML=ALL_TAB_KEYS.map((key,i)=>{
+    const locked=LOCKED_TABS.includes(i);
+    return `
+    <div class="settings-row">
+      <div class="settings-label">${t(key)}${locked?' 🔒':''}</div>
+      <label class="toggle">
+        <input type="checkbox" ${hidden.includes(i)?'':'checked'} ${locked?'disabled':''} onchange="toggleTabVisible(${i},this)">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>`;
+  }).join('');
+}
+function toggleTabVisible(idx,chk){
+  if(LOCKED_TABS.includes(idx))return;
+  let hidden=getHiddenTabs();
+  if(chk.checked)hidden=hidden.filter(i=>i!==idx);
+  else{
+    // Prevent hiding all non-locked tabs at once leaving nothing meaningful — allow it actually,
+    // home and more remain, so no hard block needed.
+    if(!hidden.includes(idx))hidden.push(idx);
+  }
+  setHiddenTabs(hidden);
+  applyTabVisibility();
+  haptic('light');
+}
 // ═══════════════════════════════════════
 // SETTINGS & THEME
 // ═══════════════════════════════════════
@@ -1793,6 +2113,14 @@ const STRINGS={
     savings:'Birikim', debts:'Borçlar',
     receivables:'Alacaklar', my_debts:'Borçlarım',
     debt_receivable:'Alacak', debt_payable:'Borç', due_label:'Vade',
+    save_failed:'Kayıt başarısız! Depolama dolu veya kapalı olabilir.',
+    water_goal_label:'Günlük Hedef', save_btn:'Kaydet',
+    water_goal_saved:'Hedef kaydedildi', water_goal_invalid:'Geçersiz hedef (250-10000 ml arası)',
+    tab_manager_lbl:'Sekmeler', tab_manager_sub:'Kullanmadığın sekmeleri kapatabilirsin. Anasayfa ve Daha Fazla her zaman açık kalır.',
+    budget_tab:'Bütçe', budget_set_hint:'Kategoriye aylık harcama limiti belirle', budget_limit_ph:'Limit (₺)',
+    budget_saved:'Limit kaydedildi', budget_over:'Limiti aştın!', budget_warn:'Limite yaklaşıyorsun (%80)',
+    budget_empty:'Henüz limit belirlenmedi', budget_summary_lbl:'Bu Ay Bütçe',
+    cat_exists:'Bu kategori zaten var', cat_added:'Kategori eklendi', new_cat_ph:'Yeni kategori adı',
     currency:'Para Birimi',
     inv_deposit_ph:'Yatır / Çek',
     inv_name_ph:'Hedef Adı', inv_goal_ph:'Hedef',
@@ -1862,6 +2190,14 @@ const STRINGS={
     savings:'Savings', debts:'Debts',
     receivables:'Receivables', my_debts:'My Debts',
     debt_receivable:'Receivable', debt_payable:'Debt', due_label:'Due',
+    save_failed:'Save failed! Storage may be full or disabled.',
+    water_goal_label:'Daily Goal', save_btn:'Save',
+    water_goal_saved:'Goal saved', water_goal_invalid:'Invalid goal (must be 250-10000 ml)',
+    tab_manager_lbl:'Tabs', tab_manager_sub:'Turn off tabs you don\'t use. Home and More always stay on.',
+    budget_tab:'Budget', budget_set_hint:'Set a monthly spending limit per category', budget_limit_ph:'Limit (₺)',
+    budget_saved:'Limit saved', budget_over:'Budget exceeded!', budget_warn:'Approaching limit (80%)',
+    budget_empty:'No limits set yet', budget_summary_lbl:'This Month\'s Budget',
+    cat_exists:'Category already exists', cat_added:'Category added', new_cat_ph:'New category name',
     currency:'Currency',
     inv_deposit_ph:'Deposit / Withdraw',
     inv_name_ph:'Goal Name', inv_goal_ph:'Target',
@@ -1933,6 +2269,7 @@ function applyLang(){
   document.getElementById('lang-en')?.classList.toggle('active',currentLang==='en');
   // Dinamik render
   rHome();rTasks();rHabits();rSleep();rFinance();rReport();rCalendar();rWater();rNotes();
+  buildTabManager();
   updateNotifStatus();
 }
 
